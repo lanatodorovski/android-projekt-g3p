@@ -23,8 +23,9 @@
             android:layout_weight="1"
             android:width="0dp"
             android:background="@null"
-            android:text="<-"
-            android:textColor="@color/blue" />
+            android:text="◀"
+            android:textColor="@color/blue"
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/textView"
@@ -43,7 +44,7 @@
             android:layout_weight="1"
             android:width="0dp"
             android:background="@null"
-            android:text="->"
+            android:text="▶"
             android:textColor="@color/blue"
             android:textSize="20sp" />
 
