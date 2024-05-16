@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,5 +22,11 @@ public class MainActivity extends AppCompatActivity {
         monthYearText = findViewById(R.id.textView);
         calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
         selectedDate = LocalDate.now();
+
+        monthYearText.setText(monthYearFromDate(selectedDate));
+    }
+    private String monthYearFromDate(LocalDate date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+        return  date.format(formatter);
     }
 }
