@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
-    private LocalDate selectedDate;
+    private LocalDate currentDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,25 +27,39 @@ public class MainActivity extends AppCompatActivity {
 
         monthYearText = findViewById(R.id.textView);
         calendarRecyclerView = findViewById(R.id.calendarRecyclerView);
-        selectedDate = LocalDate.now();
+        currentDate = LocalDate.now();
 
-        monthYearText.setText(monthYearFromDate(selectedDate));
-        //ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
-        daysInMonthArray(selectedDate);
+        git 
+
+
+
+
+        setMonthView(currentDate);
     }
-    private void daysInMonthArray(LocalDate date){
+
+    private void setMonthView(LocalDate date){
+        monthYearText.setText(monthYearFromDate(date));
+        ArrayList<String> daysInMonth = daysInMonthArray(date);
+    }
+    private ArrayList<String> daysInMonthArray(LocalDate date){
         ArrayList<String> daysInMonthArray = new ArrayList<>();
         YearMonth yearMonth = YearMonth.from(date);
 
         int daysInMonth = yearMonth.lengthOfMonth();
 
+        LocalDate firstOfMonth = date.withDayOfMonth(1);
+        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
+        monthYearText.setText("" + dayOfWeek+ ", "+firstOfMonth);
 
-        LocalDate firstOfMonth = selectedDate.withDayOfMonth(1);
-        TemporalField fieldISO = WeekFields.of(Locale.UK).dayOfWeek();
-        LocalDate lastMondayOfMonthBefore = selectedDate.withDayOfMonth(1).with(fieldISO,1);
-        int dayOfWeek = 7 - lastMondayOfMonthBefore.until(firstOfMonth).getDays();
-        monthYearText.setText(daysInMonth+ ", "+ dayOfWeek +"," + firstOfMonth);
+        for (int i = 1 ; i <= 42; i++){
+            if(i < dayOfWeek || i > daysInMonth + dayOfWeek - 1){
+                daysInMonthArray.add(" ");
+            }else{
+                daysInMonthArray.add(String.valueOf(i - dayOfWeek + 1));
 
+            }
+        }
+        return daysInMonthArray;
     }
 
     private String monthYearFromDate(LocalDate date){
