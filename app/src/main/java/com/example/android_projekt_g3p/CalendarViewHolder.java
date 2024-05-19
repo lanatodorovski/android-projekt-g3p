@@ -14,4 +14,5 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder{
         super(itemView);
         dayOfMonth = itemView.findViewById(R.id.cellDayText);
     }
+
 }
