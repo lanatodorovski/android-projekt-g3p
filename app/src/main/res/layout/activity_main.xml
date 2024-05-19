@@ -24,6 +24,7 @@
             android:width="0dp"
             android:background="@null"
             android:text="◀"
+            android:onClick="previousMonthAction"
             android:textColor="@color/blue"
             android:textSize="20sp"/>
 
@@ -45,6 +46,7 @@
             android:width="0dp"
             android:background="@null"
             android:text="▶"
+            android:onClick="nextMonthAction"
             android:textColor="@color/blue"
             android:textSize="20sp" />
 
