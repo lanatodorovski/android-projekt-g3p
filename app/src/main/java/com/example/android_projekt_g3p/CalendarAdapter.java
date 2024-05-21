@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,17 +24,20 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>{
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.callendar_cell, parent, false);
 
-        return null;
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.height = (int) (parent.getHeight()* 0.166666);
+
+        return new CalendarViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
-
+        holder.dayOfMonth.setText(daysOfMonth.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return daysOfMonth.size();
     }
 
 }
