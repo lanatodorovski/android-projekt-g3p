@@ -13,9 +13,13 @@ import java.util.ArrayList;
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>{
 
     private final ArrayList<String> daysOfMonth;
+    private final OnItemListener onItemListener;
 
-    public CalendarAdapter(ArrayList<String> daysOfMonth){
+    public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener){
+
         this.daysOfMonth = daysOfMonth;
+        this.onItemListener = onItemListener;
+
     }
 
     @NonNull
@@ -27,7 +31,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>{
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = (int) (parent.getHeight()* 0.166666);
 
-        return new CalendarViewHolder(view);
+        return new CalendarViewHolder(view, onItemListener);
     }
 
     @Override
@@ -38,6 +42,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>{
     @Override
     public int getItemCount() {
         return daysOfMonth.size();
+    }
+
+    public interface OnItemListener{
+        void OnItemClick(int position, String dayText);
     }
 
 }

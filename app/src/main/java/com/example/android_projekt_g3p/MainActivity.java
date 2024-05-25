@@ -1,11 +1,13 @@
 package com.example.android_projekt_g3p;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,7 +19,7 @@ import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements  CalendarAdapter.OnItemListener{
 
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
@@ -50,8 +52,12 @@ public class MainActivity extends AppCompatActivity {
     private void setMonthView(LocalDate date){
         monthYearText.setText(monthYearFromDate(date));
         ArrayList<String> daysInMonth = daysInMonthArray(date);
-        System.out.println(daysInMonth);
 
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 7);
+        calendarRecyclerView.setLayoutManager(layoutManager);
+
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
+        calendarRecyclerView.setAdapter(calendarAdapter);
     }
     private ArrayList<String> daysInMonthArray(LocalDate date){
         ArrayList<String> daysInMonthArray = new ArrayList<>();
@@ -78,5 +84,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void OnItemClick(int position, String dayText) {
 
+            Toast.makeText(this, dayText, Toast.LENGTH_SHORT).show(); 
+    }
 }
