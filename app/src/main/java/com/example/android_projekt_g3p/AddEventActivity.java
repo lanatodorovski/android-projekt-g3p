@@ -1,10 +1,13 @@
 package com.example.android_projekt_g3p;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.viewmodel.CreationExtras;
@@ -33,6 +36,13 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_event_activity);
 
+        Intent intent = getIntent();
+        int dayInMonth = intent.getIntExtra("dan", 1);
+        int month = intent.getIntExtra("mjesec", 1);
+        int year = intent.getIntExtra("godina", 2024);
+        eventDate = LocalDate.of(year, month, dayInMonth);
+
+
         eventNameInput = findViewById(R.id.editTextText);
         hasTimeSwitch = findViewById(R.id.switch1);
         eventTimeHourInput = findViewById(R.id.editTextText2);
@@ -44,12 +54,46 @@ public class AddEventActivity extends AppCompatActivity {
         addEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(eventNameInput.toString().trim().length() != 0){
+                boolean canAdd = true;
+                if(eventNameInput.getText().toString().trim().length() != 0){
                     eventName = eventNameInput.toString().trim();
+                }else{
+                    canAdd = false;
+                    Toast.makeText(getApplicationContext(),"Naziv događaja nesmije biti prazan", Toast.LENGTH_SHORT).show();
                 }
-                hasTime = hasTimeSwitch.isActivated();
+
+                if(!hasTime || !canAdd){
+                    eventTime = LocalTime.of(00,00,00);
+                    hasNotification = false;
+                }else{
+                    try {
+                        int eventTimeHour = Integer.parseInt(eventTimeHourInput.getText().toString());
+                        int eventTimeMinutes = Integer.parseInt(eventTimeMinutesInput.getText().toString());
+                        eventTime = LocalTime.of(eventTimeHour,eventTimeMinutes, 00);
+                    }catch (Exception e){
+                        Toast.makeText(getApplicationContext(), "Sati i minute nisu postavljeni u traženom formatu", Toast.LENGTH_SHORT).show();
+                        canAdd = false;
+                    }
+                    hasNotification = hasNotificationSwitch.isChecked();
+
+                }
+
+            }
+        });
+
+        hasTimeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                hasTime = !isChecked;
+
+                hasNotificationSwitch.setEnabled(hasTime);
+                eventTimeHourInput.setEnabled(hasTime);
+                eventTimeMinutesInput.setEnabled(hasTime);
+
                 if(!hasTime){
-                    
+                    hasNotificationSwitch.setChecked(false);
+                    eventTimeHourInput.setText("");
+                    eventTimeMinutesInput.setText("");
                 }
             }
         });

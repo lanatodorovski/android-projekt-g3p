@@ -65,13 +65,17 @@ public class DayActivity extends AppCompatActivity {
              addEventbtn.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-
+                     Intent intent1 = new Intent(DayActivity.this, AddEventActivity.class);
+                     intent1.putExtra("dan", viewedDate.getDayOfMonth());
+                     intent1.putExtra("mjesec",viewedDate.getMonth().getValue());
+                     intent1.putExtra("godina", viewedDate.getYear());
+                     startActivity(intent1);
                  }
              });
              backToMonthBtn.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-
+                    onBackPressed();
                  }
              });
 
