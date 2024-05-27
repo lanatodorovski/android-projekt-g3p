@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -86,7 +87,14 @@ public class MainActivity extends AppCompatActivity implements  CalendarAdapter.
 
     @Override
     public void OnItemClick(int position, String dayText) {
+        Intent intent = new Intent(getApplicationContext(), DayActivity.class);
 
-            Toast.makeText(this, dayText, Toast.LENGTH_SHORT).show(); 
+        if(!dayText.equals(" ")){
+            intent.putExtra("dan", Integer.parseInt(dayText));
+            intent.putExtra("mjesec", currentDate.plusMonths(changedMonths).getMonthValue());
+            intent.putExtra("godina", currentDate.plusMonths(changedMonths).getYear());
+            startActivity(intent);
+        }
+
     }
 }
