@@ -1,11 +1,16 @@
 package com.example.android_projekt_g3p;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
@@ -15,6 +20,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>{
 
     private final ArrayList<String> daysOfMonth;
     private final OnItemListener onItemListener;
+
 
     public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener){
 

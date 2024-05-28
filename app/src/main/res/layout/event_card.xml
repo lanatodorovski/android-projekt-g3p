@@ -6,7 +6,6 @@
     android:layout_marginStart="20dp"
     android:layout_marginTop="5dp"
     android:layout_marginEnd="20dp"
-    android:layout_marginBottom="5dp"
     app:cardCornerRadius="5dp">
 
     <LinearLayout
@@ -35,8 +34,7 @@
                 android:id="@+id/textViewDogadajNaziv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="15dp"
                 android:text="Naziv:"
                 android:textAlignment="textStart" />
 
@@ -45,6 +43,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Vrijeme: " />
+
+            <TextView
+                android:id="@+id/textViewTip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tip: " />
         </LinearLayout>
 
         <ImageView

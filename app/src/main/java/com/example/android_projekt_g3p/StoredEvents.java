@@ -19,12 +19,15 @@ public class StoredEvents {
         public LocalTime eventTime;
         public  boolean hasNotifications;
 
-        public StoredEvents(String eventName, LocalDate eventDate, boolean hasTime, LocalTime eventTime, boolean hasNotifications) {
+        public String eventType;
+
+        public StoredEvents(String eventName, LocalDate eventDate, boolean hasTime, LocalTime eventTime, boolean hasNotifications, String eventType) {
             this.eventName = eventName;
             this.eventDate = eventDate;
             this.hasTime = hasTime;
             this.eventTime = eventTime;
             this.hasNotifications = hasNotifications;
+            this.eventType = eventType;
 
             eventList.add(this);
         }

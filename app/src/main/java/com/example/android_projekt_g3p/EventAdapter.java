@@ -34,10 +34,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventViewHolder> {
             holder.eventTimeOutput.setText("Vrijeme: Neodređeno");
         }
 
+        holder.eventTypeOutput.setText("Tip: "+ event.eventType);
+
         if(!event.hasNotifications){
             holder.notificationImage.setVisibility(View.INVISIBLE);
         }
-
+        
     }
 
     @Override

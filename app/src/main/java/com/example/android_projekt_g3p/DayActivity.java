@@ -2,8 +2,12 @@ package com.example.android_projekt_g3p;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,9 +16,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Dictionary;
 
 public class DayActivity extends AppCompatActivity {
 
@@ -27,6 +35,12 @@ public class DayActivity extends AppCompatActivity {
         Button addEventbtn;
         Button backToMonthBtn;
 
+        CheckBox checkBoxSkola;
+        CheckBox checkBoxDruzenje;
+        CheckBox checkboxSport;
+        CheckBox checkBoxRodendan;
+
+        ArrayList<String> filteredTypes = new ArrayList<String>();
         LocalDate viewedDate;
          @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +61,27 @@ public class DayActivity extends AppCompatActivity {
             taskRecyclerView = findViewById(R.id.taksListRecycler);
             addEventbtn = findViewById(R.id.addEventBtn);
             backToMonthBtn = findViewById(R.id.toMonthBtn);
+
+            checkBoxSkola = findViewById(R.id.checkBoxSkola);
+            checkBoxDruzenje = findViewById(R.id.checkBoxDruzenje);
+            checkboxSport = findViewById(R.id.checkBoxSport);
+            checkBoxRodendan = findViewById(R.id.checkBoxRodendan);
+            Collections.addAll(filteredTypes,"Škola", "Druženje", "Sport", "Rođendan");
+            CompoundButton.OnCheckedChangeListener checkboxListener = new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(!isChecked){
+                        filteredTypes.remove(buttonView.getText().toString());
+                    }else{
+                        filteredTypes.add(buttonView.getText().toString());
+                    }
+                    SetDayView();
+                }
+            };
+            checkBoxSkola.setOnCheckedChangeListener(checkboxListener);
+             checkBoxDruzenje.setOnCheckedChangeListener(checkboxListener);
+             checkboxSport.setOnCheckedChangeListener(checkboxListener);
+             checkBoxRodendan.setOnCheckedChangeListener(checkboxListener);
 
             SetDayView();
 
@@ -83,8 +118,6 @@ public class DayActivity extends AppCompatActivity {
                  }
              });
 
-
-
         }
 
     @Override
@@ -94,10 +127,9 @@ public class DayActivity extends AppCompatActivity {
         setTaskRecyclerView(new StoredEvents().eventList);
     }
 
-    private void SetDayView(){
+        private void SetDayView(){
             monthYearText.setText(monthYearFromDate(viewedDate));
             dayWeekText.setText(dayWeekFromDate(viewedDate));
-
             setTaskRecyclerView(new StoredEvents().eventList);
         }
         private String monthYearFromDate(LocalDate date){
@@ -112,9 +144,9 @@ public class DayActivity extends AppCompatActivity {
         private void setTaskRecyclerView(ArrayList<StoredEvents> storedEvents){
             ArrayList<StoredEvents> filteredEvents = new ArrayList<StoredEvents>();
             for (int i = 0; i < storedEvents.size(); i++){
-                if(storedEvents.get(i).eventDate.equals(viewedDate)){
-                    filteredEvents.add(storedEvents.get(i));
-                }
+                    if(storedEvents.get(i).eventDate.equals(viewedDate) && filteredTypes.contains(storedEvents.get(i).eventType)){
+                        filteredEvents.add(storedEvents.get(i));
+                    }
             }
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
             taskRecyclerView.setLayoutManager(layoutManager);

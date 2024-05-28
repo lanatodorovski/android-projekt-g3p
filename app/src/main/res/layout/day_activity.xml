@@ -56,6 +56,64 @@
         android:textAlignment="center" />
 
     <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp">
+
+        <LinearLayout
+            android:layout_width="205dp"
+            android:layout_height="83dp"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkBoxSkola"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/blue"
+                android:checked="true"
+                android:text="Škola" />
+
+            <CheckBox
+                android:id="@+id/checkBoxDruzenje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/blue"
+                android:checked="true"
+                android:text="Druženje" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkBoxSport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/blue"
+                android:checked="true"
+                android:text="Sport" />
+
+            <CheckBox
+                android:id="@+id/checkBoxRodendan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/blue"
+                android:checked="true"
+                android:text="Rođendan" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -64,8 +122,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/taksListRecycler"
         android:layout_width="match_parent"
-        android:layout_height="535dp"
-        android:orientation="vertical">
+        android:layout_height="451dp"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -89,8 +149,9 @@
             android:backgroundTint="@color/blue"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Dodaj događaj"
-            android:textColor="@color/white" />
+            android:text="+"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/toMonthBtn"

@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,11 @@ public class AddEventActivity extends AppCompatActivity {
     EditText eventTimeMinutesInput;
     Switch hasNotificationSwitch;
 
+    RadioButton radioSkola;
+    RadioButton radioDruzenja;
+    RadioButton radioSport;
+    RadioButton radioRodendani;
+    RadioGroup radioGroup;
     Button addEventBtn;
     Button cancelBtn;
     String eventName;
@@ -35,6 +42,7 @@ public class AddEventActivity extends AppCompatActivity {
     boolean hasTime;
     LocalTime eventTime;
     boolean hasNotification;
+    String eventType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +63,36 @@ public class AddEventActivity extends AppCompatActivity {
         addEventBtn = findViewById(R.id.button3);
         cancelBtn = findViewById(R.id.button4);
 
+        radioGroup = findViewById(R.id.radioGroup);
+        radioSkola = findViewById(R.id.radioButton);
+        radioDruzenja = findViewById(R.id.radioButton2);
+        radioSport = findViewById(R.id.radioButton3);
+        radioRodendani = findViewById(R.id.radioButton4);
+
+        radioSkola.setChecked(true);
+        eventType = "Škola";
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(radioSkola.isChecked()){
+                    eventType = "Škola";
+                }else if(radioDruzenja.isChecked()){
+                    eventType = "Druženje";
+                }else if(radioSport.isChecked()){
+                    eventType = "Sport";
+                }else if(radioRodendani.isChecked()){
+                    eventType = "Rođendan";
+                }
+            }
+        });
+
+
         addEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean isValid = CheckValidation();
                 if(isValid){
-                    StoredEvents event = new StoredEvents(eventName,eventDate,hasTime,eventTime,hasNotification);
+                    StoredEvents event = new StoredEvents(eventName,eventDate,hasTime,eventTime,hasNotification, eventType);
                     onBackPressed();
                 }
 
