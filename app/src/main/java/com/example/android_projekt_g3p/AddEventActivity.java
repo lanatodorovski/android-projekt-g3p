@@ -2,15 +2,19 @@ package com.example.android_projekt_g3p;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.viewmodel.CreationExtras;
+
+import org.json.JSONArray;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -54,30 +58,20 @@ public class AddEventActivity extends AppCompatActivity {
         addEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean canAdd = true;
-                if(eventNameInput.getText().toString().trim().length() != 0){
-                    eventName = eventNameInput.toString().trim();
-                }else{
-                    canAdd = false;
-                    Toast.makeText(getApplicationContext(),"Naziv događaja nesmije biti prazan", Toast.LENGTH_SHORT).show();
+                boolean isValid = CheckValidation();
+                if(isValid){
+                    StoredEvents event = new StoredEvents(eventName,eventDate,hasTime,eventTime,hasNotification);
+                    onBackPressed();
                 }
 
-                if(!hasTime || !canAdd){
-                    eventTime = LocalTime.of(00,00,00);
-                    hasNotification = false;
-                }else{
-                    try {
-                        int eventTimeHour = Integer.parseInt(eventTimeHourInput.getText().toString());
-                        int eventTimeMinutes = Integer.parseInt(eventTimeMinutesInput.getText().toString());
-                        eventTime = LocalTime.of(eventTimeHour,eventTimeMinutes, 00);
-                    }catch (Exception e){
-                        Toast.makeText(getApplicationContext(), "Sati i minute nisu postavljeni u traženom formatu", Toast.LENGTH_SHORT).show();
-                        canAdd = false;
-                    }
-                    hasNotification = hasNotificationSwitch.isChecked();
 
-                }
+            }
+        });
 
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 
@@ -97,5 +91,38 @@ public class AddEventActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean CheckValidation(){
+        boolean canAdd = true;
+        if(eventNameInput.getText().toString().trim().length() != 0){
+            eventName = eventNameInput.getText().toString().trim();
+        }else{
+            canAdd = false;
+            Toast.makeText(getApplicationContext(),
+                    "Naziv događaja nesmije biti prazan",
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
+
+        if(!hasTime || !canAdd){
+            eventTime = LocalTime.of(00,00,00);
+            hasNotification = false;
+        }else{
+            try {
+                int eventTimeHour = Integer.parseInt(eventTimeHourInput.getText().toString());
+                int eventTimeMinutes = Integer.parseInt(eventTimeMinutesInput.getText().toString());
+                eventTime = LocalTime.of(eventTimeHour,eventTimeMinutes, 00);
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(),
+                        "Sati i minute nisu postavljeni u traženom formatu",
+                        Toast.LENGTH_SHORT)
+                        .show();
+                canAdd = false;
+            }
+            hasNotification = hasNotificationSwitch.isChecked();
+
+        }
+        return canAdd;
     }
 }

@@ -8,10 +8,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class DayActivity extends AppCompatActivity {
 
@@ -46,6 +49,7 @@ public class DayActivity extends AppCompatActivity {
             backToMonthBtn = findViewById(R.id.toMonthBtn);
 
             SetDayView();
+
             dayBackBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -79,11 +83,22 @@ public class DayActivity extends AppCompatActivity {
                  }
              });
 
+
+
         }
 
-        private void SetDayView(){
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setTaskRecyclerView(new StoredEvents().eventList);
+    }
+
+    private void SetDayView(){
             monthYearText.setText(monthYearFromDate(viewedDate));
             dayWeekText.setText(dayWeekFromDate(viewedDate));
+
+            setTaskRecyclerView(new StoredEvents().eventList);
         }
         private String monthYearFromDate(LocalDate date){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
@@ -92,6 +107,20 @@ public class DayActivity extends AppCompatActivity {
         private String dayWeekFromDate(LocalDate date){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd EEEE");
             return  date.format(formatter);
+        }
+
+        private void setTaskRecyclerView(ArrayList<StoredEvents> storedEvents){
+            ArrayList<StoredEvents> filteredEvents = new ArrayList<StoredEvents>();
+            for (int i = 0; i < storedEvents.size(); i++){
+                if(storedEvents.get(i).eventDate.equals(viewedDate)){
+                    filteredEvents.add(storedEvents.get(i));
+                }
+            }
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+            taskRecyclerView.setLayoutManager(layoutManager);
+
+            EventAdapter eventAdapter = new EventAdapter(filteredEvents);
+            taskRecyclerView.setAdapter(eventAdapter);
         }
 }
 
