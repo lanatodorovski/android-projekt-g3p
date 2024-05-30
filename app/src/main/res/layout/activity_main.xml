@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+
+
+    android:backgroundTint="#FFFFFF"
     android:orientation="vertical"
-
-
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -23,10 +25,10 @@
             android:layout_weight="1"
             android:width="0dp"
             android:background="@null"
-            android:text="◀"
             android:onClick="previousMonthAction"
+            android:text="◀"
             android:textColor="@color/blue"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView"
@@ -45,8 +47,8 @@
             android:layout_weight="1"
             android:width="0dp"
             android:background="@null"
-            android:text="▶"
             android:onClick="nextMonthAction"
+            android:text="▶"
             android:textColor="@color/blue"
             android:textSize="20sp" />
 
@@ -132,5 +134,5 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calendarRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </LinearLayout>
