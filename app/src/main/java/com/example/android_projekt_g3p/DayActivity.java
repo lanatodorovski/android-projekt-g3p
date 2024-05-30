@@ -1,6 +1,8 @@
 package com.example.android_projekt_g3p;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +18,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.lang.reflect.Array;
+import java.lang.reflect.Executable;
+import java.security.spec.ECField;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -42,6 +49,10 @@ public class DayActivity extends AppCompatActivity {
 
         ArrayList<String> filteredTypes = new ArrayList<String>();
         LocalDate viewedDate;
+
+    SharedPreferences preferences;
+    static boolean gotInformations = false;
+    static JSONArray jsonEventList;
          @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -61,6 +72,11 @@ public class DayActivity extends AppCompatActivity {
             taskRecyclerView = findViewById(R.id.taksListRecycler);
             addEventbtn = findViewById(R.id.addEventBtn);
             backToMonthBtn = findViewById(R.id.toMonthBtn);
+
+             //U PREZENTACIJU
+             getFromLocalStorage();
+
+
 
             checkBoxSkola = findViewById(R.id.checkBoxSkola);
             checkBoxDruzenje = findViewById(R.id.checkBoxDruzenje);
@@ -120,39 +136,71 @@ public class DayActivity extends AppCompatActivity {
 
         }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
 
+
+        setLocalStorage();
+
         setTaskRecyclerView(new StoredEvents().eventList);
     }
+    private void getFromLocalStorage() {
+        StoredEvents myStoredEvents = new StoredEvents();
+        preferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        String jsonEventListString = preferences.getString("jsonEventList", new JSONArray().toString());
+        try {
+            if(!gotInformations){
+                JSONArray newJsonEventList = new JSONArray(jsonEventListString);
 
-        private void SetDayView(){
-            monthYearText.setText(monthYearFromDate(viewedDate));
-            dayWeekText.setText(dayWeekFromDate(viewedDate));
-            setTaskRecyclerView(new StoredEvents().eventList);
-        }
-        private String monthYearFromDate(LocalDate date){
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
-            return  date.format(formatter);
-        }
-        private String dayWeekFromDate(LocalDate date){
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd EEEE");
-            return  date.format(formatter);
-        }
-
-        private void setTaskRecyclerView(ArrayList<StoredEvents> storedEvents){
-            ArrayList<StoredEvents> filteredEvents = new ArrayList<StoredEvents>();
-            for (int i = 0; i < storedEvents.size(); i++){
-                    if(storedEvents.get(i).eventDate.equals(viewedDate) && filteredTypes.contains(storedEvents.get(i).eventType)){
-                        filteredEvents.add(storedEvents.get(i));
-                    }
+                myStoredEvents.setFromJson(newJsonEventList);
+                gotInformations = true;
             }
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-            taskRecyclerView.setLayoutManager(layoutManager);
 
-            EventAdapter eventAdapter = new EventAdapter(filteredEvents);
-            taskRecyclerView.setAdapter(eventAdapter);
+        }catch (Exception e){
+            Log.e("error", e.toString());
         }
+    }
+    private void setLocalStorage(){
+        StoredEvents myStoredEvents = new StoredEvents();
+        try {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("jsonEventList", myStoredEvents.jsonEventList.toString());
+            editor.apply();
+        }catch (Exception e){
+            Log.e("error", e.toString());
+        }
+    }
+
+    private void SetDayView(){
+        monthYearText.setText(monthYearFromDate(viewedDate));
+        dayWeekText.setText(dayWeekFromDate(viewedDate));
+        setTaskRecyclerView(new StoredEvents().eventList);
+    }
+    private String monthYearFromDate(LocalDate date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+        return  date.format(formatter);
+    }
+    private String dayWeekFromDate(LocalDate date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd EEEE");
+        return  date.format(formatter);
+    }
+
+    private void setTaskRecyclerView(ArrayList<StoredEvents> storedEvents){
+        ArrayList<StoredEvents> filteredEvents = new ArrayList<StoredEvents>();
+        for (int i = 0; i < storedEvents.size(); i++){
+                if(storedEvents.get(i).eventDate.equals(viewedDate) && filteredTypes.contains(storedEvents.get(i).eventType)){
+                    filteredEvents.add(storedEvents.get(i));
+                }
+        }
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        taskRecyclerView.setLayoutManager(layoutManager);
+
+        EventAdapter eventAdapter = new EventAdapter(filteredEvents);
+        taskRecyclerView.setAdapter(eventAdapter);
+    }
+
 }
 
