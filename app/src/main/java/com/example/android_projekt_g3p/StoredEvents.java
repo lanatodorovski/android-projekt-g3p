@@ -19,6 +19,7 @@ import java.util.prefs.Preferences;
 
 public class StoredEvents {
         public static ArrayList<StoredEvents> eventList = new ArrayList<StoredEvents>();
+        public static JSONArray jsonEventList = new JSONArray();
         public String eventName;
         public LocalDate eventDate;
         public boolean hasTime;
@@ -36,12 +37,13 @@ public class StoredEvents {
             this.eventType = eventType;
 
             eventList.add(this);
+            toJson(this);
         }
         public  StoredEvents(){
 
         }
 
-        public JSONObject toJson( StoredEvents storedEvents){
+        private void toJson( StoredEvents storedEvents){
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("eventName", storedEvents.eventName);
@@ -51,42 +53,29 @@ public class StoredEvents {
                 jsonObject.put("hasNotifications", storedEvents.hasNotifications);
                 jsonObject.put("eventType", storedEvents.eventType);
             }catch (Exception e){
-
+                Log.e("error", e.toString());
             }
-            return  jsonObject;
+            this.jsonEventList.put(jsonObject);
         }
 
-        public void  setFromJson(JSONArray jsonEventLIst){
+        public void  setFromJson(JSONArray jsonEventListNew){
             try {
-                if(jsonEventLIst.length() == 0){
+                if(jsonEventListNew.length() == 0){
                     Log.i("msg", "PRAZAN JSON EVENZ SLTI");
                 }
-                for(int i = 0; i <  jsonEventLIst.length(); i++){
-                    JSONObject jsonEvent= jsonEventLIst.getJSONObject(i);
-                    try {
-                        new StoredEvents(
+                for(int i = 0; i <  jsonEventListNew.length(); i++){
+                    JSONObject jsonEvent=  jsonEventListNew.getJSONObject(i);
+                    StoredEvents newStoredEvent = new StoredEvents(
                                 jsonEvent.getString("eventName"),
                                 LocalDate.parse(jsonEvent.getString("eventDate")),
                                 jsonEvent.getBoolean("hasTime"),
                                 LocalTime.parse(jsonEvent.getString("eventTime")),
                                 jsonEvent.getBoolean("hasNotifications"),
-                                jsonEvent.getString("eventType")
-
-
-                        );
-                    }catch (Exception e){
-
-                    }
-
-
-                    Log.i("informacije",
-
-                             ""+jsonEvent.getBoolean("hasNotifications")
-
-                    );
+                                jsonEvent.getString("eventType"));
+                    Log.i("informacije", ""+jsonEvent.getBoolean("hasNotifications"));
                 }
             } catch (JSONException e) {
-
+                Log.e("error", e.toString());
             }
         }
 }
