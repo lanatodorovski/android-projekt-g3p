@@ -1,6 +1,8 @@
 package com.example.android_projekt_g3p;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +18,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.lang.reflect.Array;
+import java.security.spec.ECField;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -42,6 +48,9 @@ public class DayActivity extends AppCompatActivity {
 
         ArrayList<String> filteredTypes = new ArrayList<String>();
         LocalDate viewedDate;
+
+    SharedPreferences preferences;
+    static JSONArray jsonEventList;
          @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -61,6 +70,22 @@ public class DayActivity extends AppCompatActivity {
             taskRecyclerView = findViewById(R.id.taksListRecycler);
             addEventbtn = findViewById(R.id.addEventBtn);
             backToMonthBtn = findViewById(R.id.toMonthBtn);
+
+             //U PREZENTACIJU
+             StoredEvents myStoredEvents = new StoredEvents();
+             preferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
+             String jsonEventListString = preferences.getString("jsonEventList", new JSONArray().toString());
+             try {
+                 if(jsonEventList == null){
+                     jsonEventList = new JSONArray(jsonEventListString);
+                     myStoredEvents.setFromJson(jsonEventList);
+                 }
+
+             }catch (Exception e){
+
+             }
+
+
 
             checkBoxSkola = findViewById(R.id.checkBoxSkola);
             checkBoxDruzenje = findViewById(R.id.checkBoxDruzenje);
@@ -124,6 +149,16 @@ public class DayActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+
+        StoredEvents myStoredEvents = new StoredEvents();
+
+        if(myStoredEvents.eventList.size() > jsonEventList.length()){
+            JSONObject newJsonEvent= myStoredEvents.toJson(myStoredEvents.eventList.get(myStoredEvents.eventList.size() - 1));
+            jsonEventList.put(newJsonEvent);
+        }
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("jsonEventList", jsonEventList.toString());
+            editor.apply();
         setTaskRecyclerView(new StoredEvents().eventList);
     }
 
@@ -154,5 +189,6 @@ public class DayActivity extends AppCompatActivity {
             EventAdapter eventAdapter = new EventAdapter(filteredEvents);
             taskRecyclerView.setAdapter(eventAdapter);
         }
+
 }
 
